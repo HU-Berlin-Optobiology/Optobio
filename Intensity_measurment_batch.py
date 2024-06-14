@@ -135,6 +135,9 @@ def intensity_measurement ():
                 IJ.log("processing channel: "+str(i)) #report which channel is being processed
                 
                 channel_info = {}
+                # set measurment
+                IJ.run("Set Measurements...", 
+                "area mean standard min max centroid perimeter bounding fit shape feret's integrated median skewness kurtosis area_fraction stack display redirect=None decimal=3")
                 for r in range(n_r):  # loop through rois in manager
                     roi=rm.getRoi(r) # get roi from manager
                     #IJ.log("ROI number "+str(r))
