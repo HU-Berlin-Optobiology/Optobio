@@ -1,0 +1,8 @@
+@misc{optobio2023,
+	author = {Optobiology, Humboldt-Universität zu Berlin},
+	title = {Optobio},
+	year = {2023},
+	publisher = {GitHub},
+	journal = {GitHub repository},
+	howpublished = {\url{https://github.com/HU-Berlin-Optobiology/Optobio.git}}
+}
