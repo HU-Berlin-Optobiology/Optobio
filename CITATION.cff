@@ -5,7 +5,7 @@ type: software
 url: "https://github.com/HU-Berlin-Optobiology/Optobio.git"
 date-released: 2024-11-01
 authors:
-  - name: "Optobiology"
+  - name: Optobiology
     address: "Invalidenstraße 42"
     city: "Berlin"
     country: "DE"
