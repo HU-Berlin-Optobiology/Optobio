@@ -3,7 +3,7 @@ title: Optobio
 message: "If you use this software, please cite it as below."
 type: software
 url: "https://github.com/HU-Berlin-Optobiology/Optobio.git"
-year: 2023
+date-released: 2023
 authors:
   - name: "Optobiology"
     address: "Invalidenstraße 42"
