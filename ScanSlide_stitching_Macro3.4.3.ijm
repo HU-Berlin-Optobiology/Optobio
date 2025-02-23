@@ -68,21 +68,12 @@ for (i = 0; i < lengthOf(FileNamesOrig); i++) {
 		base = 19;
 		channelBegin = 14;
 		channelEnd = 11;
+		//New as of 3.4.3
 		if (substring(FileNamesUnique[0], lengthOf(FileNamesUnique[0])-begin, lengthOf(FileNamesUnique[0])-end) != "sdc") {
 			begin = 18;
 			base = 20;
 		}
 	}
-	//New as of 3.4
-	//else if (endsWith(FileNamesOrig[i], "_s1.ome.tif")) {
-		//FileNamesUnique = Array.concat(FileNamesUnique, FileNamesOrig[i]);
-		//filetype = ".ome.tif";
-		//begin = 18;
-		//end = 14;
-		//base = 20;
-		//channelBegin = 14;
-		//channelEnd = 11;
-	//}
 }
 // Figuring out method used to get images, either sdc or Confocal
 if (substring(FileNamesUnique[0], lengthOf(FileNamesUnique[0])-begin, lengthOf(FileNamesUnique[0])-end) == "sdc") {
@@ -136,19 +127,29 @@ else if (NrOfChannels == 4) {
 }
 //Checking how many planes there are in one stack
 if (File.exists(Folder + "/" + FileNameBase + "w4"+Method+Ch1+"_s1"+filetype)){
-	open(Folder + "/" + FileNameBase + "w4"+Method+Ch1+"_s1"+filetype);}
+	run("Bio-Formats Windowless Importer", "open="+Folder + "/" + FileNameBase + "w4"+Method+Ch1+"_s1"+filetype);}
 else if (File.exists(Folder + "/" + FileNameBase + "w3"+Method+Ch1+"_s1"+filetype)){
-	open(Folder + "/" + FileNameBase + "w3"+Method+Ch1+"_s1"+filetype);}
+	run("Bio-Formats Windowless Importer", "open="+Folder + "/" + FileNameBase + "w3"+Method+Ch1+"_s1"+filetype);}
 else if (File.exists(Folder + "/" + FileNameBase + "w2"+Method+Ch1+"_s1"+filetype)){
-	open(Folder + "/" + FileNameBase + "w2"+Method+Ch1+"_s1"+filetype);}
+	run("Bio-Formats Windowless Importer", "open="+Folder + "/" + FileNameBase + "w2"+Method+Ch1+"_s1"+filetype);}
 else if (File.exists(Folder + "/" + FileNameBase + "w1"+Method+Ch1+"_s1"+filetype)){
-	open(Folder + "/" + FileNameBase + "w1"+Method+Ch1+"_s1"+filetype);}
+	run("Bio-Formats Windowless Importer", "open="+Folder + "/" + FileNameBase + "w1"+Method+Ch1+"_s1"+filetype);}
 else if (File.exists(Folder + "/" + FileNameBase + Method+Ch1+"_s1"+filetype)){
-	open(Folder + "/" + FileNameBase + Method+Ch1+"_s1"+filetype);}
+	run("Bio-Formats Windowless Importer", "open="+Folder + "/" + FileNameBase + Method+Ch1+"_s1"+filetype);}
 
 getDimensions(width, height, channels, slices, frames);
 close();
-NrOfPlanes=slices;
+//New as of 3.4.4
+if (slices<frames){
+	NrOfPlanes=frames;
+}
+else if (slices=>frames){
+	NrOfPlanes=slices;
+}
+else {
+	print("Something is wrong with the number of Z-Planes. Abort Everything");
+	exit;
+}
 Columns=ColumnsAll[l];
 Rows=RowsAll[l];
 
