@@ -143,7 +143,7 @@ close();
 if (slices<frames){
 	NrOfPlanes=frames;
 }
-else if (slices=>frames){
+else if (slices>=frames){
 	NrOfPlanes=slices;
 }
 else {
