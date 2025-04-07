@@ -34,7 +34,7 @@ Grid = getNumber("How does the Grid Pattern look like? From 0 up to 3 --> 0 = ro
 Order = getNumber("How does the Order of the Grid-Pattern look like? From 0 up to 3 --> 0 = Right & Down,  1 = Left & Down, 2 = Right & Up, 3 = Left & Up For more details look at Grid/Collection Stitching", 0);
 
 Grids = newArray("row-by-row", "column-by-column", "snake by rows", "snake by columns");
-Orders = newArray("Right & Down", "Left & Down", "Right & Up", "Left & Up");
+Orders = newArray("Right & Down                ", "Left & Down", "Right & Up", "Left & Up");
 Max_Projection = getBoolean("Do you want to apply a maximum z-projection at the end to generated images?"); // Max z-projection to stitched images y/n
 for (l = 0; l < lengthOf(Folders); l++) {
 	
@@ -51,14 +51,27 @@ for (i = 0; i < lengthOf(FileNamesOrig); i++) {
 		}
 		File.rename(Folder+"/"+FileNamesOrig[i], ndPath+"/"+FileNamesOrig[i]);
 	}
-	if (endsWith(FileNamesOrig[i], "_s1.stk")) {
+	if (endsWith(FileNamesOrig[i], "_s1.stk") | endsWith(FileNamesOrig[i], "_s1.tif")) {
 		FileNamesUnique = Array.concat(FileNamesUnique, FileNamesOrig[i]);
-		filetype = ".stk";
+		if (endsWith(FileNamesOrig[i], "_s1.stk")) filetype = ".stk";
+		else if (endsWith(FileNamesOrig[i], "_s1.tif")) filetype = ".tif";
 		begin = 14;
 		end = 10;
 		base = 16;
 		channelBegin = 10;
 		channelEnd = 7;
+		//New as of 3.4.5 //Figuring out the method of aquisition (Conf or sdc)
+		if (substring(FileNamesUnique[0], lengthOf(FileNamesUnique[0])-begin, lengthOf(FileNamesUnique[0])-end) != "Conf") {
+			if (substring(FileNamesUnique[0], lengthOf(FileNamesUnique[0])-begin+1, lengthOf(FileNamesUnique[0])-end) != "sdc") {
+				exit("Couldn't find either <<Conf>> or <<sdc>> inside the name");
+			}
+			else { 
+				Method = "sdc";
+				base = 15;
+			}
+		}
+		else Method = "Conf";
+		
 	}
 	else if (endsWith(FileNamesOrig[i], "_s1.ome.tif")) {
 		FileNamesUnique = Array.concat(FileNamesUnique, FileNamesOrig[i]);
@@ -68,19 +81,18 @@ for (i = 0; i < lengthOf(FileNamesOrig); i++) {
 		base = 19;
 		channelBegin = 14;
 		channelEnd = 11;
-		//New as of 3.4.3
+		//New as of 3.4.5 //Figuring out the method of aquisition (Conf or sdc)
 		if (substring(FileNamesUnique[0], lengthOf(FileNamesUnique[0])-begin, lengthOf(FileNamesUnique[0])-end) != "sdc") {
-			begin = 18;
-			base = 20;
+			if (substring(FileNamesUnique[0], lengthOf(FileNamesUnique[0])-begin-1, lengthOf(FileNamesUnique[0])-end) != "Conf") {
+				exit("Couldn't find either <<Conf>> or <<sdc>> inside the name");
+			}
+			else { 
+				Method = "Conf";
+				base = 18;
+			}
 		}
+		else Method = "sdc";
 	}
-}
-// Figuring out method used to get images, either sdc or Confocal
-if (substring(FileNamesUnique[0], lengthOf(FileNamesUnique[0])-begin, lengthOf(FileNamesUnique[0])-end) == "sdc") {
-	Method = "sdc";
-}
-else if (substring(FileNamesUnique[0], lengthOf(FileNamesUnique[0])-begin, lengthOf(FileNamesUnique[0])-end) == "Conf") {
-	Method = "Conf";
 }
 // If only one channel used, file names won't have w1 and so on
 if (lengthOf(FileNamesUnique) == 1) {
@@ -90,12 +102,8 @@ else {
 	n = 0;
 }
 //Getting Base Name of Images based on used Method (everything before w1... if available)
-if (Method == "sdc") {
-	FileNameBase = substring(FileNamesUnique[0], 0, lengthOf(FileNamesUnique[0])-base+n);
-}
-else if (Method == "Conf") {
-	FileNameBase = substring(FileNamesUnique[0], 0, lengthOf(FileNamesUnique[0])-base+n);
-}
+FileNameBase = substring(FileNamesUnique[0], 0, lengthOf(FileNamesUnique[0])-base+n);
+
 for (i = 0; i < lengthOf(FileNamesUnique); i++) {
 	channel = substring(FileNamesUnique[i], lengthOf(FileNamesUnique[i])-channelBegin, lengthOf(FileNamesUnique[i])-channelEnd);
 	ChannelsUnique = Array.concat(ChannelsUnique, channel);
@@ -126,20 +134,46 @@ else if (NrOfChannels == 4) {
 	Ch4 = ChannelsUnique[3];
 }
 //Checking how many planes there are in one stack
-if (File.exists(Folder + "/" + FileNameBase + "w4"+Method+Ch1+"_s1"+filetype)){
-	run("Bio-Formats Windowless Importer", "open="+Folder + "/" + FileNameBase + "w4"+Method+Ch1+"_s1"+filetype);}
-else if (File.exists(Folder + "/" + FileNameBase + "w3"+Method+Ch1+"_s1"+filetype)){
-	run("Bio-Formats Windowless Importer", "open="+Folder + "/" + FileNameBase + "w3"+Method+Ch1+"_s1"+filetype);}
-else if (File.exists(Folder + "/" + FileNameBase + "w2"+Method+Ch1+"_s1"+filetype)){
-	run("Bio-Formats Windowless Importer", "open="+Folder + "/" + FileNameBase + "w2"+Method+Ch1+"_s1"+filetype);}
-else if (File.exists(Folder + "/" + FileNameBase + "w1"+Method+Ch1+"_s1"+filetype)){
-	run("Bio-Formats Windowless Importer", "open="+Folder + "/" + FileNameBase + "w1"+Method+Ch1+"_s1"+filetype);}
-else if (File.exists(Folder + "/" + FileNameBase + Method+Ch1+"_s1"+filetype)){
-	run("Bio-Formats Windowless Importer", "open="+Folder + "/" + FileNameBase + Method+Ch1+"_s1"+filetype);}
+if (filetype == ".ome.tif") {
+	if (File.exists(Folder + "/" + FileNameBase + "w4"+Method+Ch1+"_s1"+filetype)){
+		run("Bio-Formats Windowless Importer", "open="+Folder + "/" + FileNameBase + "w4"+Method+Ch1+"_s1"+filetype);}
+	else if (File.exists(Folder + "/" + FileNameBase + "w3"+Method+Ch1+"_s1"+filetype)){
+		run("Bio-Formats Windowless Importer", "open="+Folder + "/" + FileNameBase + "w3"+Method+Ch1+"_s1"+filetype);}
+	else if (File.exists(Folder + "/" + FileNameBase + "w2"+Method+Ch1+"_s1"+filetype)){
+		run("Bio-Formats Windowless Importer", "open="+Folder + "/" + FileNameBase + "w2"+Method+Ch1+"_s1"+filetype);}
+	else if (File.exists(Folder + "/" + FileNameBase + "w1"+Method+Ch1+"_s1"+filetype)){
+		run("Bio-Formats Windowless Importer", "open="+Folder + "/" + FileNameBase + "w1"+Method+Ch1+"_s1"+filetype);}
+	else if (File.exists(Folder + "/" + FileNameBase + Method+Ch1+"_s1"+filetype)){
+		run("Bio-Formats Windowless Importer", "open="+Folder + "/" + FileNameBase + Method+Ch1+"_s1"+filetype);}
+}
+if (filetype == ".stk") {
+	if (File.exists(Folder + "/" + FileNameBase + "w4"+Method+Ch1+"_s1"+filetype)){
+		open(Folder + "/" + FileNameBase + "w4"+Method+Ch1+"_s1"+filetype);}
+	else if (File.exists(Folder + "/" + FileNameBase + "w3"+Method+Ch1+"_s1"+filetype)){
+		open(Folder + "/" + FileNameBase + "w3"+Method+Ch1+"_s1"+filetype);}
+	else if (File.exists(Folder + "/" + FileNameBase + "w2"+Method+Ch1+"_s1"+filetype)){
+		open(Folder + "/" + FileNameBase + "w2"+Method+Ch1+"_s1"+filetype);}
+	else if (File.exists(Folder + "/" + FileNameBase + "w1"+Method+Ch1+"_s1"+filetype)){
+		open(Folder + "/" + FileNameBase + "w1"+Method+Ch1+"_s1"+filetype);}
+	else if (File.exists(Folder + "/" + FileNameBase + Method+Ch1+"_s1"+filetype)){
+		open(Folder + "/" + FileNameBase +Method+Ch1+"_s1"+filetype);}
+}
+if (filetype == ".tif") {
+	if (File.exists(Folder + "/" + FileNameBase + "w4"+Method+Ch1+"_s1"+filetype)){
+		run("Bio-Formats Windowless Importer", "open=["+Folder + "/" + FileNameBase + "w4"+Method+Ch1+"_s1"+filetype+"]");}
+	else if (File.exists(Folder + "/" + FileNameBase + "w3"+Method+Ch1+"_s1"+filetype)){
+		run("Bio-Formats Windowless Importer", "open=["+Folder + "/" + FileNameBase + "w3"+Method+Ch1+"_s1"+filetype+"]");}
+	else if (File.exists(Folder + "/" + FileNameBase + "w2"+Method+Ch1+"_s1"+filetype)){
+		run("Bio-Formats Windowless Importer", "open=["+Folder + "/" + FileNameBase + "w2"+Method+Ch1+"_s1"+filetype+"]");}
+	else if (File.exists(Folder + "/" + FileNameBase + "w1"+Method+Ch1+"_s1"+filetype)){
+		run("Bio-Formats Windowless Importer", "open=["+Folder + "/" + FileNameBase + "w1"+Method+Ch1+"_s1"+filetype+"]");}
+	else if (File.exists(Folder + "/" + FileNameBase + Method+Ch1+"_s1"+filetype)){
+		run("Bio-Formats Windowless Importer", "open=["+Folder + "/" + FileNameBase + Method+Ch1+"_s1"+filetype+"]");}
+}
 
 getDimensions(width, height, channels, slices, frames);
 close();
-//New as of 3.4.4
+//New as of 3.4.4 //If for some reason the metadata has saved the z-planes as timepoints or something fails completely (else-statement)
 if (slices<frames){
 	NrOfPlanes=frames;
 }
@@ -197,16 +231,16 @@ subfolder4 = Ch4;}
 //Run stitching on two separate channels and store them in separate folders; stitching order depends on used microscope
 for (b = 0; b < NrOfChannels; b++) {
 	if (b==0) {
-	Params="type=[Grid: "+ Grids[Grid]+"] order=["+Orders[Order]+"                ] grid_size_x=" + Columns + " grid_size_y=" + Rows + " tile_overlap="+Overlap+" first_file_index_i=1 directory=[" + Folder + "] file_names=[" + FileNameBase + suffix1 + "{i}" + filetype + "] output_textfile_name=TileConfiguration.txt fusion_method=[Linear Blending] regression_threshold=0.30 max/avg_displacement_threshold=2.50 absolute_displacement_threshold=3.50 computation_parameters=[Save memory (but be slower)] image_output=[Write to disk] output_directory=[" + Folder + "/"+subfolder1+"]";
+	Params="type=[Grid: "+ Grids[Grid]+"] order=["+Orders[Order]+"] grid_size_x=" + Columns + " grid_size_y=" + Rows + " tile_overlap="+Overlap+" first_file_index_i=1 directory=[" + Folder + "] file_names=[" + FileNameBase + suffix1 + "{i}" + filetype + "] output_textfile_name=TileConfiguration.txt fusion_method=[Linear Blending] regression_threshold=0.30 max/avg_displacement_threshold=2.50 absolute_displacement_threshold=3.50 computation_parameters=[Save memory (but be slower)] image_output=[Write to disk] output_directory=[" + Folder + "/"+subfolder1+"]";
 	run("Grid/Collection stitching", Params);}
 	if (b==1) {
-	Params2="type=[Grid: "+ Grids[Grid]+"] order=["+Orders[Order]+"                ] grid_size_x=" + Columns + " grid_size_y=" + Rows + " tile_overlap="+Overlap+" first_file_index_i=1 directory=[" + Folder + "] file_names=[" + FileNameBase + suffix2 + "{i}" + filetype + "] + output_textfile_name=TileConfiguration.txt fusion_method=[Linear Blending] regression_threshold=0.30 max/avg_displacement_threshold=2.50 absolute_displacement_threshold=3.50 computation_parameters=[Save memory (but be slower)] image_output=[Write to disk] output_directory=[" + Folder + "/"+subfolder2+"]";
+	Params2="type=[Grid: "+ Grids[Grid]+"] order=["+Orders[Order]+"] grid_size_x=" + Columns + " grid_size_y=" + Rows + " tile_overlap="+Overlap+" first_file_index_i=1 directory=[" + Folder + "] file_names=[" + FileNameBase + suffix2 + "{i}" + filetype + "] + output_textfile_name=TileConfiguration.txt fusion_method=[Linear Blending] regression_threshold=0.30 max/avg_displacement_threshold=2.50 absolute_displacement_threshold=3.50 computation_parameters=[Save memory (but be slower)] image_output=[Write to disk] output_directory=[" + Folder + "/"+subfolder2+"]";
 	run("Grid/Collection stitching", Params2);}
 	if (b==2) {
-	Params3="type=[Grid: "+ Grids[Grid]+"] order=["+Orders[Order]+"                ] grid_size_x=" + Columns + " grid_size_y=" + Rows + " tile_overlap="+Overlap+" first_file_index_i=1 directory=[" + Folder + "] file_names=[" + FileNameBase + suffix3 + "{i}" + filetype + "] output_textfile_name=TileConfiguration.txt fusion_method=[Linear Blending] regression_threshold=0.30 max/avg_displacement_threshold=2.50 absolute_displacement_threshold=3.50 computation_parameters=[Save memory (but be slower)] image_output=[Write to disk] output_directory=[" + Folder + "/"+subfolder3+"]";
+	Params3="type=[Grid: "+ Grids[Grid]+"] order=["+Orders[Order]+"] grid_size_x=" + Columns + " grid_size_y=" + Rows + " tile_overlap="+Overlap+" first_file_index_i=1 directory=[" + Folder + "] file_names=[" + FileNameBase + suffix3 + "{i}" + filetype + "] output_textfile_name=TileConfiguration.txt fusion_method=[Linear Blending] regression_threshold=0.30 max/avg_displacement_threshold=2.50 absolute_displacement_threshold=3.50 computation_parameters=[Save memory (but be slower)] image_output=[Write to disk] output_directory=[" + Folder + "/"+subfolder3+"]";
 	run("Grid/Collection stitching", Params3);}
 	if (b==3) {
-	Params4="type=[Grid: "+ Grids[Grid]+"] order=["+Orders[Order]+"                ] grid_size_x=" + Columns + " grid_size_y=" + Rows + " tile_overlap="+Overlap+" first_file_index_i=1 directory=[" + Folder + "] file_names=[" + FileNameBase + suffix4 + "{i}" + filetype + "] output_textfile_name=TileConfiguration.txt fusion_method=[Linear Blending] regression_threshold=0.30 max/avg_displacement_threshold=2.50 absolute_displacement_threshold=3.50 computation_parameters=[Save memory (but be slower)] image_output=[Write to disk] output_directory=[" + Folder + "/"+subfolder4+"]";
+	Params4="type=[Grid: "+ Grids[Grid]+"] order=["+Orders[Order]+"] grid_size_x=" + Columns + " grid_size_y=" + Rows + " tile_overlap="+Overlap+" first_file_index_i=1 directory=[" + Folder + "] file_names=[" + FileNameBase + suffix4 + "{i}" + filetype + "] output_textfile_name=TileConfiguration.txt fusion_method=[Linear Blending] regression_threshold=0.30 max/avg_displacement_threshold=2.50 absolute_displacement_threshold=3.50 computation_parameters=[Save memory (but be slower)] image_output=[Write to disk] output_directory=[" + Folder + "/"+subfolder4+"]";
 	run("Grid/Collection stitching", Params4);}}
 
 
