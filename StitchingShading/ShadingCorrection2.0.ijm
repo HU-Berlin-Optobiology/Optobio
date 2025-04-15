@@ -1,3 +1,9 @@
+//Check whether BaSiC is installed
+List.setCommands;
+if (List.get("BaSiC ")!="") {// Plugin is installed
+}
+else {exit("Plugin not installed");}
+
 LoadDir = getDir("Path from where to load images");
 Save = getString("Where to save images", "Def");
 SaveDir = LoadDir + "/" + Save
@@ -97,7 +103,9 @@ for (a=0;a<ChannelsUnique.length;a++){
 	Wins = getList("image.titles");
 	for (i=0; i<Wins.length; i++){
 		selectImage(Wins[i]);
-		run("Z Project...", "projection=[Max Intensity]");
+		getDimensions(width, height, channels, slices, frames);
+		if (slices!=1 && channels!=1) { //Avoid Errors when ecountering a scan slide without optical sections
+			run("Z Project...", "projection=[Max Intensity]");}
 		rename("0"+i);
 	}
 	run("Convert Images to Stack");
