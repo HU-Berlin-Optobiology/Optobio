@@ -1,9 +1,3 @@
-function inside(value, array) {
-	for (i=0; i<array.length; i++) {
-		if (value == array[i]) return true;
-	}
-	return false;
-}
 LoadDir = getDir("Path from where to load images");
 Save = getString("Where to save images", "Def");
 SaveDir = LoadDir + "/" + Save
@@ -116,7 +110,10 @@ for (a=0;a<ChannelsUnique.length;a++){
 	Wins2 = getList("image.titles");
 	for (i=0; i<Wins2.length;i++){
 		selectImage(Wins2[i]);
-		saveAs("Tiff", SaveDir+"/"+FileNameBase+"w"+(a+1)+Method+wl+"_s"+(i+1)+".tif");
+		if (ChannelsUnique.length>1) {
+			saveAs("Tiff", SaveDir+"/"+FileNameBase+"w"+(a+1)+Method+wl+"_s"+(i+1)+".tif");}
+		else if (ChannelsUnique.length==1) {
+			saveAs("Tiff", SaveDir+"/"+FileNameBase+Method+wl+"_s"+(i+1)+".tif");}
 	}
 	close("*");
 }
@@ -348,7 +345,8 @@ if (File.exists(SaveDir + "/"+Ch4+"Small")) {
 	File.delete(SaveDir + "/"+Ch4+"Small");}
 
 run("Image Sequence...", "open=[" + SaveDir + "/TempSmall/1.tif] number=" + NrOfPlanes*NrOfChannels + " file=tif sort use");
-run("Stack to Hyperstack...", "order=xyczt(default) channels=" + NrOfChannels + " slices=" + NrOfPlanes + " frames=1 display=Color");
+if (NrOfChannels>1){
+	run("Stack to Hyperstack...", "order=xyczt(default) channels=" + NrOfChannels + " slices=" + NrOfPlanes + " frames=1 display=Color");}
 saveAs("Tiff", SaveDir + "/"+NrOfChannels+"ChannelsSmall.tif");
 close();
 
@@ -383,7 +381,8 @@ if (File.exists(SaveDir + "/"+Ch4)) {
 	File.delete(SaveDir + "/"+Ch4);}
 
 run("Image Sequence...", "open=[" + SaveDir + "/Temp/1.tif] number=" + NrOfPlanes*NrOfChannels + " file=tif sort use");
-run("Stack to Hyperstack...", "order=xyczt(default) channels=" + NrOfChannels + " slices=" + NrOfPlanes + " frames=1 display=Color");
+if (NrOfChannels>1) {
+	run("Stack to Hyperstack...", "order=xyczt(default) channels=" + NrOfChannels + " slices=" + NrOfPlanes + " frames=1 display=Color");}
 saveAs("Tiff", SaveDir + "/"+NrOfChannels+"Channels.tif");
 close();	
 
