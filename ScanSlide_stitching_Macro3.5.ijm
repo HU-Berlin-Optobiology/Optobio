@@ -1,4 +1,4 @@
-//The backbone of this Macro was established by Jasper Grindl (or so) in teamwork with Nathalie Hertrich
+//The backbone of this Macro was established by Jasper Grendel in teamwork with Nathalie Hertrich
 //Afterwards it has been updated and improved by Erich Weisheim
 //As of 3.2: ND file gets moved to a subfolder on auto in case user forgets to remove it.
 //As of 3.3: No writing needs to be done anymore; script will ask user about everything required (Folders, dimensions, Order of stitching and Max-Projection); Added Overlap parameter
