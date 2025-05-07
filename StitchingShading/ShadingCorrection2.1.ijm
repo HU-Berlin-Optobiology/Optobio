@@ -2,11 +2,11 @@
 List.setCommands;
 if (List.get("BaSiC ")!="") {// Plugin is installed
 }
-else {exit("Plugin not installed");}
+else {exit("Plugin BaSiC is not installed");}
 
 LoadDir = getDir("Path from where to load images");
 Save = getString("Where to save images", "Def");
-SaveDir = LoadDir + "/" + Save
+SaveDir = LoadDir + "/" + Save;
 if (File.exists(SaveDir)!= true){
 	File.makeDirectory(SaveDir);
 }
@@ -104,7 +104,7 @@ for (a=0;a<ChannelsUnique.length;a++){
 	for (i=0; i<Wins.length; i++){
 		selectImage(Wins[i]);
 		getDimensions(width, height, channels, slices, frames);
-		if (slices!=1 && channels!=1) { //Avoid Errors when ecountering a scan slide without optical sections
+		if (slices!=1 || channels!=1 || frames!=1) { //Avoid Errors when ecountering a scan slide without optical sections
 			run("Z Project...", "projection=[Max Intensity]");}
 		rename("0"+i);
 	}
