@@ -20,13 +20,11 @@ ftype = ".ome.tif"
 
 # Method used to acquire your data; activate your method or make it
 # Keep only one of them active and silence the others with a # at the beginning of the line
-ftype = ".ome.tif"
 method = "wf"
 # method = ""
 
 # Method to replace method used to acquire data
 # Keep only one of them active and silence the others with a # at the beginning of the line
-ftype = ".ome.tif"
 Method = "Conf" # HH_SDC
 # Method = "sdc" # SDC
 
