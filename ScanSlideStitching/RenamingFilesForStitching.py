@@ -12,16 +12,21 @@ import os
 path = ""
 
 # file type of files to be renamed; activate one that fits your type or make your own
+# Keep only one of them active and silence the others with a # at the beginning of the line
 ftype = ".ome.tif"
 # ftype = ".stk"
 # ftype = ".tif"
 # ftype = ""
 
 # Method used to acquire your data; activate your method or make it
+# Keep only one of them active and silence the others with a # at the beginning of the line
+ftype = ".ome.tif"
 method = "wf"
 # method = ""
 
 # Method to replace method used to acquire data
+# Keep only one of them active and silence the others with a # at the beginning of the line
+ftype = ".ome.tif"
 Method = "Conf" # HH_SDC
 # Method = "sdc" # SDC
 
@@ -40,4 +45,3 @@ for f in files:
             new = new.replace("DAPI", WL)
         # print(f"Old: {old}\n New: {new}\n\n") # Testing before renaming stuff without knowing output
         os.rename(old, new)
-        
