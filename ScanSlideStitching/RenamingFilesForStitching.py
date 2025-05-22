@@ -6,7 +6,7 @@ Created on Thu May 22 11:15:51 2025
 """
 import os
 
-# Path to files to be renamed; needs the / seperator and not the windows \ one!
+# Path to files to be renamed; needs the / separator and not the windows \ one!
 # Path can also contain subfolders containing files to be renamed
 # important is, that file type and method for acquisition is the same
 path = ""
