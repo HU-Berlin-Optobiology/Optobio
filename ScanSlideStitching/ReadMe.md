@@ -1,6 +1,6 @@
 # Stitching Macro
 ## How it works; How data has to look like
-- This macro can process multiple folders. The files have to have a certain naming pattern to be processed by this macro.
+- This macro can process multiple folders. The files have to have a certain naming pattern to be processed by this macro. The python script in this folder can help out with that.
 - For every folder, the macro asks about parameters for the grid stitching (amount of rows and columns) and also checks whether provided Folder exists.
 - Parameters like overlap, grid pattern and whether a maximum z-projection should be applied are only asked once.
 - .nd and .ome files are automatically moved to a separate folder, that is generated, to avoid issues while stitching (folder is called ND and is generated inside folder with data)
