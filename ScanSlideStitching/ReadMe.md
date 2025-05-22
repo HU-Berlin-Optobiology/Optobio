@@ -6,7 +6,7 @@
 - .nd and .ome files are automatically moved to a separate folder, that is generated, to avoid issues while stitching (folder is called ND and is generated inside folder with data)
 - Files have to have a certain naming pattern to be recognised by the macro, while the suffix is the most important part:
   - files have to end with either *w"i""Method""Channel"_s"j""file-type"* (for multi channel) or with *"Method"_s"j""file-type"* (for single channel).
-  - "i" is element of [1,4]; "Method" is either *sdc* or *Conf*; "Channel" is a three digit number, usually representing the excitation laser wavelength (i.e. 488); "j" is element of [1,♾️) and represents the number of tiles of the scan slide; Supported "file-type" are *.ome.tif*, *.stk*, *.tif*.
+  - "i" is element of [1,4]; "Method" is either *sdc* or *Conf*; "Channel" is a string with length 3, usually representing the excitation laser wavelength (e.g. 488) or something similar to that (e.g. Cy5); "j" is element of [1,♾️) and represents the number of tiles of the scan slide; Supported "file-type" are *.ome.tif*, *.stk*, *.tif*.
 - Images can also be either 2D or 3D; it also assumes that #frames are the number of Z-planes if #frames>#slices; usually #slices are the number of Z-planes; if information about frames and/or slices is missing, it should kill itself (line 183-185).
 - After folders and parameters are provided by the user, it is recommended to not interfere with Fiji anymore as it may result in unwanted behaviour
 - What it does:
