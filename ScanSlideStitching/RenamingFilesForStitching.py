@@ -27,6 +27,7 @@ method = "wf"
 # Keep only one of them active and silence the others with a # at the beginning of the line
 Method = "Conf" # HH_SDC
 # Method = "sdc" # SDC
+# Method = "" # Whatever you want
 
 #####################################################################################################################
 ### End of user input
