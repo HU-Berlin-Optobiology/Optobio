@@ -21,3 +21,6 @@ Improve visuals of scan slides for representative purposes mostly (removes the v
   - Now all other images are closed, the stack is seperated into individual images and they are saved one by one
   - In the end, all open windows are closed and this process starts again for the other wavelengths if available.
 - From line 123 'til the end it is a slightly adjusted version of our stitching macro V.3.5
+# Information about the plugin BaSiC
+by Tingying Peng, Kurt Thorn, Timm Schroeder, Lichao Wang, Fabian J Theis, Carsten Marr*, Nassir Navab*, Nature Communication 8:14836 (2017). doi: 10.1038/ncomms14836.
+- "Unlike local contrast equalization methods, which could distort the true intensity variations within an original image or across multiple images, BaSiC is built on solid physical models of optical imaging and hence is able to recover biologically relevant intensities for image quantification."
