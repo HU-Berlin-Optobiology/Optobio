@@ -1,4 +1,4 @@
-//The backbone of this Macro was established by Jasper Grendel in teamwork with Nathalie Hertrich
+//The backbone of this Macro was established by Jasper Grindl (or so) in teamwork with Nathalie Hertrich
 //Afterwards it has been updated and improved by Erich Weisheim
 //As of 3.2: ND file gets moved to a subfolder on auto in case user forgets to remove it.
 //As of 3.3: No writing needs to be done anymore; script will ask user about everything required (Folders, dimensions, Order of stitching and Max-Projection); Added Overlap parameter
@@ -136,38 +136,38 @@ else if (NrOfChannels == 4) {
 //Checking how many planes there are in one stack
 if (filetype == ".ome.tif") {
 	if (File.exists(Folder + "/" + FileNameBase + "w4"+Method+Ch1+"_s1"+filetype)){
-		run("Bio-Formats Windowless Importer", "open="+Folder + "/" + FileNameBase + "w4"+Method+Ch1+"_s1"+filetype);}
+		run("Bio-Formats Windowless Importer", "open=["+Folder + FileNameBase + "w4"+Method+Ch1+"_s1"+filetype+"]");}
 	else if (File.exists(Folder + "/" + FileNameBase + "w3"+Method+Ch1+"_s1"+filetype)){
-		run("Bio-Formats Windowless Importer", "open="+Folder + "/" + FileNameBase + "w3"+Method+Ch1+"_s1"+filetype);}
+		run("Bio-Formats Windowless Importer", "open=["+Folder + FileNameBase + "w3"+Method+Ch1+"_s1"+filetype+"]");}
 	else if (File.exists(Folder + "/" + FileNameBase + "w2"+Method+Ch1+"_s1"+filetype)){
-		run("Bio-Formats Windowless Importer", "open="+Folder + "/" + FileNameBase + "w2"+Method+Ch1+"_s1"+filetype);}
+		run("Bio-Formats Windowless Importer", "open=["+Folder + FileNameBase + "w2"+Method+Ch1+"_s1"+filetype+"]");}
 	else if (File.exists(Folder + "/" + FileNameBase + "w1"+Method+Ch1+"_s1"+filetype)){
-		run("Bio-Formats Windowless Importer", "open="+Folder + "/" + FileNameBase + "w1"+Method+Ch1+"_s1"+filetype);}
+		run("Bio-Formats Windowless Importer", "open=["+Folder + FileNameBase + "w1"+Method+Ch1+"_s1"+filetype+"]");}
 	else if (File.exists(Folder + "/" + FileNameBase + Method+Ch1+"_s1"+filetype)){
-		run("Bio-Formats Windowless Importer", "open="+Folder + "/" + FileNameBase + Method+Ch1+"_s1"+filetype);}
+		run("Bio-Formats Windowless Importer", "open=["+Folder + FileNameBase + Method+Ch1+"_s1"+filetype+"]");}
 }
 if (filetype == ".stk") {
 	if (File.exists(Folder + "/" + FileNameBase + "w4"+Method+Ch1+"_s1"+filetype)){
 		open(Folder + "/" + FileNameBase + "w4"+Method+Ch1+"_s1"+filetype);}
-	else if (File.exists(Folder + "/" + FileNameBase + "w3"+Method+Ch1+"_s1"+filetype)){
+	else if (File.exists(Folder + FileNameBase + "w3"+Method+Ch1+"_s1"+filetype)){
 		open(Folder + "/" + FileNameBase + "w3"+Method+Ch1+"_s1"+filetype);}
-	else if (File.exists(Folder + "/" + FileNameBase + "w2"+Method+Ch1+"_s1"+filetype)){
+	else if (File.exists(Folder + FileNameBase + "w2"+Method+Ch1+"_s1"+filetype)){
 		open(Folder + "/" + FileNameBase + "w2"+Method+Ch1+"_s1"+filetype);}
-	else if (File.exists(Folder + "/" + FileNameBase + "w1"+Method+Ch1+"_s1"+filetype)){
+	else if (File.exists(Folder + FileNameBase + "w1"+Method+Ch1+"_s1"+filetype)){
 		open(Folder + "/" + FileNameBase + "w1"+Method+Ch1+"_s1"+filetype);}
-	else if (File.exists(Folder + "/" + FileNameBase + Method+Ch1+"_s1"+filetype)){
+	else if (File.exists(Folder + FileNameBase + Method+Ch1+"_s1"+filetype)){
 		open(Folder + "/" + FileNameBase +Method+Ch1+"_s1"+filetype);}
 }
 if (filetype == ".tif") {
 	if (File.exists(Folder + "/" + FileNameBase + "w4"+Method+Ch1+"_s1"+filetype)){
 		run("Bio-Formats Windowless Importer", "open=["+Folder + "/" + FileNameBase + "w4"+Method+Ch1+"_s1"+filetype+"]");}
-	else if (File.exists(Folder + "/" + FileNameBase + "w3"+Method+Ch1+"_s1"+filetype)){
+	else if (File.exists(Folder + FileNameBase + "w3"+Method+Ch1+"_s1"+filetype)){
 		run("Bio-Formats Windowless Importer", "open=["+Folder + "/" + FileNameBase + "w3"+Method+Ch1+"_s1"+filetype+"]");}
-	else if (File.exists(Folder + "/" + FileNameBase + "w2"+Method+Ch1+"_s1"+filetype)){
+	else if (File.exists(Folder + FileNameBase + "w2"+Method+Ch1+"_s1"+filetype)){
 		run("Bio-Formats Windowless Importer", "open=["+Folder + "/" + FileNameBase + "w2"+Method+Ch1+"_s1"+filetype+"]");}
-	else if (File.exists(Folder + "/" + FileNameBase + "w1"+Method+Ch1+"_s1"+filetype)){
+	else if (File.exists(Folder + FileNameBase + "w1"+Method+Ch1+"_s1"+filetype)){
 		run("Bio-Formats Windowless Importer", "open=["+Folder + "/" + FileNameBase + "w1"+Method+Ch1+"_s1"+filetype+"]");}
-	else if (File.exists(Folder + "/" + FileNameBase + Method+Ch1+"_s1"+filetype)){
+	else if (File.exists(Folder + FileNameBase + Method+Ch1+"_s1"+filetype)){
 		run("Bio-Formats Windowless Importer", "open=["+Folder + "/" + FileNameBase + Method+Ch1+"_s1"+filetype+"]");}
 }
 
