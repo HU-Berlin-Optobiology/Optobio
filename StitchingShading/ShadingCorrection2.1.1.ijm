@@ -71,7 +71,7 @@ for (i=0; i<Imgs.length; i++){
 				exit("Couldn't find either <<Conf>> or <<sdc>> inside the name");
 			}
 			else Method = "Conf";
-			base = 18;
+			base = 20;
 		}
 		else Method = "sdc";
 	}
@@ -94,7 +94,7 @@ for (a=0;a<ChannelsUnique.length;a++){
 			file = Imgs[i];
 			name = wl+"_s"+s+filetype;
 			if (endsWith(file, name)==true) {
-				if (filetype == ".ome.tif") run("Bio-Formats Windowless Importer", "open="+LoadDir+"/"+file);
+				if (filetype == ".ome.tif") run("Bio-Formats Windowless Importer", "open=["+LoadDir+"/"+file+"]");
 				else if (filetype == ".stk") open(LoadDir+"/"+file);
 				rename(wl+"_s0"+s+filetype);
 			}
