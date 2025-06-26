@@ -88,7 +88,7 @@ for (i = 0; i < lengthOf(FileNamesOrig); i++) {
 			}
 			else { 
 				Method = "Conf";
-				base = 18;
+				base = 20;
 			}
 		}
 		else Method = "sdc";
