@@ -1,7 +1,76 @@
 // TODO:
 // Have Weka segmentation run before this to segment neurons to get roi for comdet
 
-//Supported filetypes: .tif, .stk, .tiff; if other filetypes wanted, adjust line 223
+//Supported filetypes: .tif, .stk, .tiff; if other filetypes wanted, adjust line 354
+
+function Coloc(Dir, SaveDir, prefix, inside, channels, calc, Max, join, plot, shape, add, table, chParams, option0) { 
+// runs ComDet's colocalization with given parameters
+// Launching plugin on newly created x-channel image depending on amount of channels
+	//getting values from array chParams
+	ch1i = chParams[0];
+	ch1l = chParams[1];
+	ch1a = chParams[2];
+	ch1s = chParams[3];
+	
+	ch2i = chParams[4];
+	ch2l = chParams[5];
+	ch2a = chParams[6];
+	ch2s = chParams[7];
+	
+	ch3i = chParams[8];
+	ch3l = chParams[9];
+	ch3a = chParams[10];
+	ch3s = chParams[11];
+	
+	ch4i = chParams[12];
+	ch4l = chParams[13];
+	ch4a = chParams[14];
+	ch4s = chParams[15];
+	
+	SaveDir1 = SaveDir+"/"+prefix;
+	if (inside==true){
+		SaveDir1=Dir+"/"+SaveFolder;
+		if (File.isDirectory(SaveDir1)==false){
+			File.makeDirectory(SaveDir1);
+		}
+	}
+	if (inside==false){
+		if (File.isDirectory(SaveDir)==false){File.makeDirectory(SaveDir);}
+		if (File.isDirectory(SaveDir1)==false){File.makeDirectory(SaveDir1);}
+	}
+	if (channels == "1" || channels == "2" || channels == "3" || channels == "4") {
+		run("Detect Particles",  calc+" max="+Max+" "+join+" "+plot+" rois="+shape+" add="+add+" summary="+table+" "+ch1i+" "+ch1l+" ch1a="+ch1a+" ch1s="+ch1s);
+	}
+	if (channels == "12" || channels=="13" || channels=="14" || channels=="23" || channels=="24" || channels=="34") {
+		run("Detect Particles",  calc+" max="+Max+" "+join+" "+plot+" rois="+shape+" add="+add+" summary="+table+" "+ch1i+" "+ch1l+" ch1a="+ch1a+" ch1s="+ch1s+" "+ch2i+" "+ch2l+" ch2a="+ch2a+" ch2s="+ch2s);
+	}
+	if (channels == "123" || channels=="124" || channels=="134" || channels=="234") {
+		run("Detect Particles",  calc+" max="+Max+" "+join+" "+plot+" rois="+shape+" add="+add+" summary="+table+" "+ch1i+" "+ch1l+" ch1a="+ch1a+" ch1s="+ch1s+" "+ch2i+" "+ch2l+" ch2a="+ch2a+" ch2s="+ch2s+" "+ch3i+" "+ch3l+" ch3a="+ch3a+" ch3s="+ch3s);
+	}
+	if (channels == "1234") {
+		run("Detect Particles",  calc+" max="+Max+" "+join+" "+plot+" rois="+shape+" add="+add+" summary="+table+" "+ch1i+" "+ch1l+" ch1a="+ch1a+" ch1s="+ch1s+" "+ch2i+" "+ch2l+" ch2a="+ch2a+" ch2s="+ch2s+" "+ch3i+" "+ch3l+" ch3a="+ch3a+" ch3s="+ch3s+" "+ch4i+" "+ch4l+" ch4a="+ch4a+" ch4s="+ch4s);
+	}
+	// Saving all results from plugin according to decisions
+	saveAs("Tiff", SaveDir1+"/Marked_Co-loc_"+option0+Imgs[img]);
+	Table.rename("Results", Imgs[img]+"_Results_"+option0+".csv");
+	saveAs("Results", SaveDir1+"/"+Imgs[img]+"_Results_"+option0+".csv");
+	close(Imgs[img]+"_Results_"+option0+".csv");
+	if (table=="Reset"){
+		Table.rename("Summary", Imgs[img]+"_Summary_"+option0+".csv");
+		saveAs("Results", SaveDir1+"/"+Imgs[img]+"_Summary_"+option0+".csv");
+		close(Imgs[img]+"_Summary_"+option0+".csv");
+	}
+	if (add!="[All detections]" && add!="Nothing"){
+		print(add);
+		roiManager("Save", SaveDir1+"/"+Imgs[img]+"_Rois_"+option0+".zip");
+		close("ROI Manager");
+	}
+	close("Log");
+	close("*");
+	
+}
+//define optional parameter for function here and change later in code to something specific
+option0 = "";
 
 // Get multiple Folders from where to load images
 LoadDirs = newArray();
@@ -160,6 +229,21 @@ if (channels == "1" || channels == "2" || channels == "3" || channels == "4") {
 	ch1l = Dialog.getCheckbox(); //check2ch1
 	ch1a = Dialog.getNumber(); //no1ch1
 	ch1s = Dialog.getNumber(); //no2ch1
+	
+	ch2i = "";
+	ch2l = "";
+	ch2a = "";
+	ch2s = "";
+	
+	ch3i = "";
+	ch3l = "";
+	ch3a = "";
+	ch3s = "";
+	
+	ch4i = "";
+	ch4l = "";
+	ch4a = "";
+	ch4s = "";
 }
 if (channels == "12" || channels=="13" || channels=="14" || channels=="23" || channels=="24" || channels=="34") {
 	ch1i = Dialog.getCheckbox(); //check1ch1
@@ -171,6 +255,16 @@ if (channels == "12" || channels=="13" || channels=="14" || channels=="23" || ch
 	ch2l = Dialog.getCheckbox(); //check2ch2
 	ch2a = Dialog.getNumber(); //no1ch2
 	ch2s = Dialog.getNumber(); //no2ch2
+	
+	ch3i = "";
+	ch3l = "";
+	ch3a = "";
+	ch3s = "";
+	
+	ch4i = "";
+	ch4l = "";
+	ch4a = "";
+	ch4s = "";
 }
 if (channels == "123" || channels=="124" || channels=="134" || channels=="234") {
 	ch1i = Dialog.getCheckbox(); //check1ch1
@@ -187,6 +281,11 @@ if (channels == "123" || channels=="124" || channels=="134" || channels=="234") 
 	ch3l = Dialog.getCheckbox(); //check2ch3
 	ch3a = Dialog.getNumber(); //no1ch3
 	ch3s = Dialog.getNumber(); //no2ch3
+	
+	ch4i = "";
+	ch4l = "";
+	ch4a = "";
+	ch4s = "";
 }
 if (channels == "1234") {
 	ch1i = Dialog.getCheckbox(); //check1ch1
@@ -209,12 +308,14 @@ if (channels == "1234") {
 	ch4a = Dialog.getNumber(); //no1ch4
 	ch4s = Dialog.getNumber(); //no2ch4
 }
+chParams = newArray(ch1i, ch1l, ch1a, ch1s, ch2i, ch2l, ch2a, ch2s, ch3i, ch3l, ch3a, ch3s, ch4i, ch4l, ch4a, ch4s); //had to do that as maximum arguments per function is 20
+Failsafe=false; //becomes true once a .zip roi is encountered
 // Loading images from folder --> splitting into individual channels --> merging wanted channels
 for (folder=0; folder<LoadDirs.length; folder++){
 	Dir = LoadDirs[folder];
 	TempPrefix=split(Dir, "\\");
 	prefix=TempPrefix[TempPrefix.length-1];
-	SaveDir1 = SaveDir + prefix;
+	SaveDir1 = SaveDir +"/"+ prefix;
 	Files = getFileList(Dir);
 	Imgs = newArray();
 	if (rois==true){ROIs = newArray();}
@@ -224,9 +325,12 @@ for (folder=0; folder<LoadDirs.length; folder++){
 			img = Files[file];
 			Imgs = Array.concat(Imgs,img);
 		}
-		if (endsWith(Files[file], ".roi")==true && rois==true){
-			roi = Files[file];
-			ROIs = Array.concat(ROIs,roi);
+		if (rois==true){
+			if (endsWith(Files[file], ".roi")==true || endsWith(Files[file], ".zip")==true){
+				roi = Files[file];
+				ROIs = Array.concat(ROIs,roi);
+				if (endsWith(Files[file], ".zip")==true){Failsafe=true;}
+			}
 		}
 	}
 	if (rois==true){
@@ -245,6 +349,7 @@ for (folder=0; folder<LoadDirs.length; folder++){
 			}
 		}
 	}
+	// Processing images per image to filter out wanted channels
 	for (img=0; img<Imgs.length; img++){
 		if (endsWith(Imgs[img], ".tif")==true || endsWith(Imgs[img], ".tiff")==true || endsWith(Imgs[img], ".stk")==true){
 			run("Bio-Formats Windowless Importer", "open=["+Dir+"/"+Imgs[img]+"]");
@@ -268,11 +373,54 @@ for (folder=0; folder<LoadDirs.length; folder++){
 						if (File.isDirectory(SaveDir1)==false){File.makeDirectory(SaveDir1);}
 					}
 					saveAs("Tiff", SaveDir1+"/Co-loc_"+Imgs[img]);}
+				if (Failsafe==true && endsWith(ROIs[img], ".zip")==true){
+					if(saving==false){
+						if (inside==true){
+						SaveDir1 = Dir+"/"+SaveFolder;
+						if (File.isDirectory(SaveDir1)==false){
+							File.makeDirectory(SaveDir1);
+						}
+					}
+					if (inside==false){
+						if (File.isDirectory(SaveDir)==false){File.makeDirectory(SaveDir);}
+						if (File.isDirectory(SaveDir1)==false){File.makeDirectory(SaveDir1);}
+					}
+					saveAs("Tiff", SaveDir1+"/Co-loc_"+Imgs[img]);
+					}
+				}
 			}
-		if (endsWith(ROIs[img], ".roi")==true && rois==true){
-			open(Dir+"/"+ROIs[img]);
+			// loading rois for individual image when bool is true
+			if (rois==true){
+				if (endsWith(ROIs[img], ".roi")==true){
+					open(Dir+"/"+ROIs[img]);
+					Coloc(Dir, SaveDir, prefix, inside, channels, calc, Max, join, plot, shape, add, table, chParams, option0);
+				}
+				if (endsWith(ROIs[img], ".zip")==true){
+					open(Dir+"/"+ROIs[img]);
+					count = roiManager("count"); // #ROIs in zip
+					for (roi=0;roi<count;roi++){
+						if (roi==0){roiManager("select", 0);}
+						if (roi>0){
+							open(SaveDir1+"/Co-loc_"+Imgs[img]);
+							open(Dir+"/"+ROIs[img]);
+							roiManager("select", roi);
+						}
+						option0 = "ROI"+roi;
+						Coloc(Dir, SaveDir, prefix, inside, channels, calc, Max, join, plot, shape, add, table, chParams, option0);
+					}
+				}
+				if (ROIs[img]=="") {
+					option0="";
+					Coloc(Dir, SaveDir, prefix, inside, channels, calc, Max, join, plot, shape, add, table, chParams, option0);
+				}
+			}
+			if (rois==false){
+				option0=""; // just to be safe to reset it here if it has been changed throughout the code for some reason
+				Coloc(Dir, SaveDir, prefix, inside, channels, calc, Max, join, plot, shape, add, table, chParams, option0);
+			}
 		}
-		// Launching plugin on newly created x-channel image depending on amount of channels
+	}
+	if (table=="Append") {
 		SaveDir1 = SaveDir+"/"+prefix;
 		if (inside==true){
 			SaveDir1=Dir+"/"+SaveFolder;
@@ -284,45 +432,8 @@ for (folder=0; folder<LoadDirs.length; folder++){
 			if (File.isDirectory(SaveDir)==false){File.makeDirectory(SaveDir);}
 			if (File.isDirectory(SaveDir1)==false){File.makeDirectory(SaveDir1);}
 		}
-		if (channels == "1" || channels == "2" || channels == "3" || channels == "4") {
-			run("Detect Particles",  calc+" max="+Max+" "+join+" "+plot+" rois="+shape+" add="+add+" summary="+table+" "+ch1i+" "+ch1l+" ch1a="+ch1a+" ch1s="+ch1s);
-		}
-		if (channels == "12" || channels=="13" || channels=="14" || channels=="23" || channels=="24" || channels=="34") {
-			run("Detect Particles",  calc+" max="+Max+" "+join+" "+plot+" rois="+shape+" add="+add+" summary="+table+" "+ch1i+" "+ch1l+" ch1a="+ch1a+" ch1s="+ch1s+" "+ch2i+" "+ch2l+" ch2a="+ch2a+" ch2s="+ch2s);
-		}
-		if (channels == "123" || channels=="124" || channels=="134" || channels=="234") {
-			run("Detect Particles",  calc+" max="+Max+" "+join+" "+plot+" rois="+shape+" add="+add+" summary="+table+" "+ch1i+" "+ch1l+" ch1a="+ch1a+" ch1s="+ch1s+" "+ch2i+" "+ch2l+" ch2a="+ch2a+" ch2s="+ch2s+" "+ch3i+" "+ch3l+" ch3a="+ch3a+" ch3s="+ch3s);
-		}
-		if (channels == "1234") {
-			run("Detect Particles",  calc+" max="+Max+" "+join+" "+plot+" rois="+shape+" add="+add+" summary="+table+" "+ch1i+" "+ch1l+" ch1a="+ch1a+" ch1s="+ch1s+" "+ch2i+" "+ch2l+" ch2a="+ch2a+" ch2s="+ch2s+" "+ch3i+" "+ch3l+" ch3a="+ch3a+" ch3s="+ch3s+" "+ch4i+" "+ch4l+" ch4a="+ch4a+" ch4s="+ch4s);
-		}
-		// Saving all results from plugin according to decisions
-		saveAs("Tiff", SaveDir1+"/Marked_Co-loc_"+Imgs[img]);
-		Table.rename("Results", Imgs[img]+"_Results.csv");
-		saveAs("Results", SaveDir1+"/"+Imgs[img]+"_Results.csv");
-		close(Imgs[img]+"_Results.csv");
-		if (table=="Reset"){
-			Table.rename("Summary", Imgs[img]+"_Summary.csv");
-			saveAs("Results", SaveDir1+"/"+Imgs[img]+"_Summary.csv");
-			close(Imgs[img]+"_Summary.csv");
-		}
-		if (add!="[All detections]" && add!="Nothing"){
-			print(add);
-			roiManager("Save", SaveDir1+"/"+Imgs[img]+"_Rois.zip");
-			close("ROI Manager");
-		}
-		close("Log");
-		close("*");
-		}
+		Table.rename("Summary", prefix+"_Summary_"+option0+".csv");
+		saveAs("Results", SaveDir1+"/"+prefix+"_Summary_"+option0+".csv");
+		close(prefix+"_Summary_"+option0+".csv");
 	}
-	if (table=="Append") {
-		Table.rename("Summary", prefix+"_Summary.csv");
-		saveAs("Results", SaveDir1+"/"+prefix+"_Summary.csv");
-		close(prefix+"_Summary.csv");
-	}
-
 }
-
-
-
-
