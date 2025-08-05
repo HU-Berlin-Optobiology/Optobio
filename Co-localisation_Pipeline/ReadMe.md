@@ -1,4 +1,16 @@
-# Analysis for Co-localisation (WIP)
+# Batch processing of raw data
+## How it works
+To prepare your raw data for the co-localisation macro, use the macro titled "BatchProcessing_Z-Projections.ijm". \
+This macro can handle *ome.tif*, *.tif*, *.stk* and *.tiff* files. \
+All generated images will be saved inside a folder created inside the original folder with a prefix indicating used Z-projection. \
+The name of the generated folder is provided by the user and will be generated on the go. \
+At first, the user will be asked to provide all folders that should be processed. The Log-window helps to keep track what folders are already provided. \
+Afterwards, some information need to be provided: \
+  - Name of folder where generated images will be safed
+  - What sort of Z-Projection should be applied to all images
+  - What colour-code should be used
+In the end, the user has to provide the number of channels per folder. This implies that all images inside one folder have the same amount of channels. If this is not the case, please adjust the data accordingly. \
+# Analysis for Co-localisation
 ## How it works; How data has to look like
 This macro enables batch-processing of multiple folders with multiple images. When multiple folders are provided, make sure that all images have the same channels that need to be analyzed. \
 ⚠️You can only provide one combination of channels that should be analyzed⚠️ \
@@ -26,3 +38,4 @@ Toggle "Save generated images": with this you can decide whether generated multi
 Toggle "ROIs are provided for the analysis": With this you tell the script whether some folder have ROIs inside that can be used on images to analyze a certain region in the images. \  
 3rd: After continuing by pressing OK, another window pops up. With this window, you provide channel specific parameters for ComDet's spot colocalization. \
 After pressing OK, the macro will start to process all folders and their individual images and saving the results in the provided directory.
+
