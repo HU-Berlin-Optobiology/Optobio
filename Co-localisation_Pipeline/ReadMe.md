@@ -9,6 +9,7 @@ Afterwards, some information need to be provided:
   - Name of folder where generated images will be safed
   - What sort of Z-Projection should be applied to all images
   - What colour-code should be used
+
 In the end, the user has to provide the number of channels per folder. This implies that all images inside one folder have the same amount of channels. If this is not the case, please adjust the data accordingly.
 # Analysis for Co-localisation
 ## How it works; How data has to look like
@@ -38,5 +39,6 @@ Toggle "Save generated images": with this you can decide whether generated multi
 Toggle "ROIs are provided for the analysis": With this you tell the script whether some folder have ROIs inside that can be used on images to analyze a certain region in the images. \  
 3rd: After continuing by pressing OK, another window pops up. With this window, you provide channel specific parameters for ComDet's spot colocalization. \
 After pressing OK, the macro will start to process all folders and their individual images and saving the results in the provided directory.
+
 
 
